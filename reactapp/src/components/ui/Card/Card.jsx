@@ -1,40 +1,67 @@
-import '../../../index.css';
-import Button from '../Button/Button'
-import React from 'react';
+import React from "react";
+import Card from "../components/UI/Card/Card";
+import { shallow, mount } from "enzyme";
 
-class Card extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isDisable:false
+var questionProp, wrapper, mockFunction;
+
+
+
+describe('Testing Card Component', () => {
+    beforeEach(() => {
+        mockFunction = jest.fn();
+
+        questionProp = {
+            questionId : 2,
+            question : "What color is are the leaves ?",
+            option1 : "Blue",
+            option2 : "Red",
+            option3 : "Yellow",
+            option4 : "Green",
+            answer : "Green"
         }
-    }
-    correctAnswerMarkUpdate=(e,value)=> {
-            if(this.props.answer===value)
-            {
-                this.props.onAnsChg()
-            }
-            this.setState({isDisable:true})
-            this.props.onQuesChg()
-        }
-    render() {
-        return (
 
-            <div className="card">
-                <div className="main">
-                    <h4 className='question'>{this.props.question}</h4>
-                </div>
-                <div className="main">
-                    <div className="options">
-                        <Button className="btn" onClick={e=>this.correctAnswerMarkUpdate(e,this.props.options.option1)} disabled={this.state.isDisable} >{this.props.options.option1}</Button>
-                        <Button className="btn" onClick={e=>this.correctAnswerMarkUpdate(e,this.props.options.option2)} disabled={this.state.isDisable}>{this.props.options.option2}</Button>
-                        <Button className="btn" onClick={e=>this.correctAnswerMarkUpdate(e,this.props.options.option3)} disabled={this.state.isDisable}>{this.props.options.option3}</Button>
-                        <Button className="btn" onClick={e=>this.correctAnswerMarkUpdate(e,this.props.options.option4)} disabled={this.state.isDisable}>{this.props.options.option4}</Button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-}
+        wrapper = mount(<Card 
+            key={questionProp.questionId}
+            question={questionProp.question}
+            correctAnswerMarkUpdate={mockFunction}
+            attempt={mockFunction}
+            options={{
+            option1: questionProp.option1,
+            option2: questionProp.option2,
+            option3: questionProp.option3,
+            option4: questionProp.option4
+            }}
+            answer={questionProp.answer}
+        />);
+        
+    })
 
-export default Card;
+
+    test('testcase10', () => {
+        expect(wrapper.instance()).toBeDefined();
+    });
+
+    describe('Testing the display content of Card Component', () => {
+
+        // Check if the component displays the question properly
+
+        test('testcase11', () => {
+            expect(wrapper.find('h4').text()).toBe('What color is are the leaves ?');
+        })
+        
+        // check if all the options are rendered according to the test data
+
+        test('testcase12', () => {
+    
+            let optionsList = ['Blue', 'Red', 'Yellow', 'Green'];
+            let optionIterator = 0;
+            expect(wrapper.find('button')).toHaveLength(4);
+            
+            wrapper.find('button').forEach(node => {
+                expect(node.text()).toBe(optionsList[optionIterator]);
+                optionIterator++;
+            });
+        })
+    })
+
+})

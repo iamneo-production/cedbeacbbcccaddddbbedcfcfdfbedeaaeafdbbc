@@ -1,12 +1,22 @@
-import '../../../index.css';
-import React from 'react';
+import React from "react";
+import Button from "../components/UI/Button/Button";
+import { shallow, mount } from "enzyme";
 
+describe('Testing Button Component', () => {
 
-const Button = (props)=>{
+    // render the button without any error
     
-    return(
-            <button id={props.id} className={props.className} onClick={props.onClick} disabled={props.disabled} hidden={props.hidden} >{props.children}</button>
-        
-    )
-}
-export default Button;
+    test('testcase8', () => {
+        const wrapper = shallow(<Button />);
+        expect(wrapper.instance()).toBeDefined();
+    })
+
+    // displays the correct text inside the component
+
+    test('testcase9', () => {
+        const TestingInput = 'Button Works'
+    const wrapper = shallow(<Button>{TestingInput}</Button>)
+        expect(wrapper.props().children).toBe(TestingInput)
+    })
+
+})
